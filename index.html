@@ -2,65 +2,69 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyazeh | System Terminal</title>
+    <title>Terminal Portfolio</title>
     <style>
         body {
-            background-color: #0d0d0d;
+            background-color: #0a0a0a;
             color: #00ff00;
             font-family: 'Courier New', Courier, monospace;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            padding: 20px;
             height: 100vh;
             margin: 0;
             overflow: hidden;
         }
-        .terminal {
-            width: 80%;
-            max-width: 600px;
-            background: #1a1a1a;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
-            border: 1px solid #333;
-        }
-        .line {
-            margin-bottom: 10px;
+        #terminal {
             white-space: pre-wrap;
+            line-height: 1.5;
         }
         .cursor {
             display: inline-block;
             width: 10px;
             height: 20px;
-            background: #00ff00;
+            background-color: #00ff00;
             animation: blink 1s infinite;
             vertical-align: middle;
         }
         @keyframes blink {
             50% { opacity: 0; }
         }
-        h1 { font-size: 1.2rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        a { color: #00ff00; text-decoration: none; border: 1px solid #00ff00; padding: 2px 5px; margin-top: 10px; display: inline-block; }
-        a:hover { background: #00ff00; color: #000; }
     </style>
 </head>
 <body>
 
-<div class="terminal">
-    <h1>HYAZEH_OS v1.0 - STATUS: ONLINE</h1>
-    <div class="line">> INITIALIZING SYSTEM... DONE</div>
-    <div class="line">> LOADING USER: Krystian Strzemecki... DONE</div>
-    <div class="line">> SKILLS: [PC_BUILDING, WINDOWS_CONFIG, HARDWARE_DIAG]</div>
-    <div class="line">> CONTACT: strzemecki96@gmail.com</div>
-    <div class="line">> PROJECT: <span style="color: #00ccff;">New Website in progress...</span></div>
-    <div class="line">> <span class="cursor"></span></div>
-    
-    <center>
-        <a href="https://github.com/hyazeh">WRÓĆ DO GITHUB</a>
-    </center>
-</div>
+<div id="terminal"></div>
+<span class="cursor"></span>
+
+<script>
+    const text = `> INITIALIZING SYSTEM...
+> LOADING CORE MODULES... [DONE]
+> USER: hyazeh (Krystian)
+> SKILLS: [PC_BUILDING, WINDOWS_DIAGNOSTICS, HARDWARE_ASSEMBLY]
+> STATUS: READY FOR INTERNSHIP
+> 
+> "Z pasją buduję komputery i rozwiązuję problemy sprzętowe. 
+> Ten terminal to mój mały projekt w HTML/JS."
+> 
+> KONTAKT: [TWÓJ MAIL / LINK DO CV]`;
+
+    const terminal = document.getElementById('terminal');
+    let i = 0;
+
+    function typeWriter() {
+        if (i < text.length) {
+            terminal.innerHTML += text.charAt(i);
+            i++;
+            
+            window.scrollTo(0, document.body.scrollHeight);
+            setTimeout(typeWriter, 40);
+        }
+    }
+
+   
+    window.onload = typeWriter;
+</script>
 
 </body>
 </html>
