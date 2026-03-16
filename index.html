@@ -2,110 +2,85 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>zxcv</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyazeh | System Terminal</title>
     <style>
         body {
-            background-color: #0a0a0a;
+            background-color: #0d0d0d;
             color: #00ff00;
             font-family: 'Courier New', Courier, monospace;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
-        .terminal-box {
-            border: 2px solid #00ff00;
-            padding: 30px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+        .terminal {
+            width: 80%;
             max-width: 600px;
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+            border: 1px solid #333;
         }
-        table {
-            border-collapse: collapse;
-        }
-        td {
-            padding: 8px;
-            vertical-align: top;
-        }
-        .label {
-            color: #008800;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        
-        .typing {
-            display: inline-block;
+        .line {
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+            display: none; /* Ukryte na starcie */
         }
         .cursor {
             display: inline-block;
             width: 10px;
-            height: 18px;
-            background-color: #00ff00;
+            height: 20px;
+            background: #00ff00;
             animation: blink 1s infinite;
-            margin-left: 5px;
+            vertical-align: middle;
         }
-        @keyframes blink { 50% { opacity: 0; } }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        h1 { font-size: 1.2rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        a { color: #00ff00; text-decoration: none; border: 1px solid #00ff00; padding: 2px 5px; margin-top: 10px; display: inline-block; }
+        a:hover { background: #00ff00; color: #000; }
+        center { display: none; } /* Ukryte do końca pisania */
     </style>
 </head>
 <body>
 
-<div class="terminal-box">
-    <table>
-        <tr>
-            <td class="label">UŻYTKOWNIK:</td>
-            <td id="name" class="typing"></td>
-        </tr>
-        <tr>
-            <td class="label">SKILL:</td>
-            <td id="skills" class="typing"></td>
-        </tr>
-        <tr>
-            <td class="label">STATUS:</td>
-            <td id="status" class="typing"></td>
-        </tr>
-        <tr>
-            <td class="label">INFO:</td>
-            <td id="info" class="typing"></td>
-        </tr>
-    </table>
-    <div id="cursor-line" style="margin-top: 10px; opacity: 0;">
-        <span class="label">></span><span class="cursor"></span>
-    </div>
+<div class="terminal">
+    <h1>HYAZEH_OS v1.0 - STATUS: ONLINE</h1>
+    <div class="line">> INITIALIZING SYSTEM... DONE</div>
+    <div class="line">> LOADING USER: Krystian Strzemecki... DONE</div>
+    <div class="line">> SKILLS: [PC_BUILDING, WINDOWS_CONFIG, HARDWARE_DIAG]</div>
+    <div class="line">> CONTACT: strzemecki96@gmail.com</div>
+    <div class="line">> PROJECT: <span style="color: #00ccff;">New Website in progress...</span></div>
+    <div class="line" id="last-line">> <span class="cursor"></span></div>
+    
+    <center id="back-link">
+        <a href="https://github.com/hyazeh">WRÓĆ DO GITHUB</a>
+    </center>
 </div>
 
 <script>
-    const data = [
-        { id: "name", text: "hyazeh (Krystian)" },
-        { id: "skills", text: "Budowa PC, Diagnostyka, Windows, Hardware" },
-        { id: "status", text: "" },
-        { id: "info", text: "Z pasją składam komputery i ogarniam sprzęt." }
-    ];
+    const lines = document.querySelectorAll('.line');
+    const backLink = document.getElementById('back-link');
+    let currentLine = 0;
 
-    async function typeAll() {
-        for (let item of data) {
-            await typeEffect(item.id, item.text);
+    function showNextLine() {
+        if (currentLine < lines.length) {
+            lines[currentLine].style.display = 'block';
+            currentLine++;
+            setTimeout(showNextLine, 600); // Odstęp między liniami (600ms)
+        } else {
+            backLink.style.display = 'block';
         }
-        
-        document.getElementById('cursor-line').style.opacity = "1";
     }
 
-    function typeEffect(elementId, text) {
-        return new Promise(resolve => {
-            let i = 0;
-            const el = document.getElementById(elementId);
-            const interval = setInterval(() => {
-                if (i < text.length) {
-                    el.innerHTML += text.charAt(i);
-                    i++;
-                } else {
-                    clearInterval(interval);
-                    resolve();
-                }
-            }, 50);
-        });
-    }
-
-    window.onload = typeAll;
+    // Start po załadowaniu
+    window.onload = showNextLine;
 </script>
 
 </body>
