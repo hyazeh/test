@@ -9,61 +9,103 @@
             color: #00ff00;
             font-family: 'Courier New', Courier, monospace;
             display: flex;
-            flex-direction: column;
-            padding: 20px;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
             margin: 0;
-            overflow: hidden;
         }
-        #terminal {
-            white-space: pre-wrap;
-            line-height: 1.5;
+        .terminal-box {
+            border: 2px solid #00ff00;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+            max-width: 600px;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        td {
+            padding: 8px;
+            vertical-align: top;
+        }
+        .label {
+            color: #008800;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        /* Klasa do efektu pisania */
+        .typing {
+            display: inline-block;
         }
         .cursor {
             display: inline-block;
             width: 10px;
-            height: 20px;
+            height: 18px;
             background-color: #00ff00;
             animation: blink 1s infinite;
-            vertical-align: middle;
+            margin-left: 5px;
         }
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
 
-<div id="terminal"></div>
-<span class="cursor"></span>
+<div class="terminal-box">
+    <table>
+        <tr>
+            <td class="label">UŻYTKOWNIK:</td>
+            <td id="name" class="typing"></td>
+        </tr>
+        <tr>
+            <td class="label">SKILL:</td>
+            <td id="skills" class="typing"></td>
+        </tr>
+        <tr>
+            <td class="label">STATUS:</td>
+            <td id="status" class="typing"></td>
+        </tr>
+        <tr>
+            <td class="label">INFO:</td>
+            <td id="info" class="typing"></td>
+        </tr>
+    </table>
+    <div id="cursor-line" style="margin-top: 10px; opacity: 0;">
+        <span class="label">></span><span class="cursor"></span>
+    </div>
+</div>
 
 <script>
-    const text = `> INITIALIZING SYSTEM...
-> LOADING CORE MODULES... [DONE]
-> USER: hyazeh (Krystian)
-> SKILLS: [PC_BUILDING, WINDOWS_DIAGNOSTICS, HARDWARE_ASSEMBLY]
-> STATUS: READY FOR INTERNSHIP
-> 
-> "Z pasją buduję komputery i rozwiązuję problemy sprzętowe. 
-> Ten terminal to mój mały projekt w HTML/JS."
-> 
-> KONTAKT: [TWÓJ MAIL / LINK DO CV]`;
+    const data = [
+        { id: "name", text: "hyazeh (Krystian)" },
+        { id: "skills", text: "Budowa PC, Diagnostyka, Windows, Hardware" },
+        { id: "status", text: "GOTOWY NA STAŻ" },
+        { id: "info", text: "Z pasją składam komputery i ogarniam sprzęt." }
+    ];
 
-    const terminal = document.getElementById('terminal');
-    let i = 0;
-
-    function typeWriter() {
-        if (i < text.length) {
-            terminal.innerHTML += text.charAt(i);
-            i++;
-            
-            window.scrollTo(0, document.body.scrollHeight);
-            setTimeout(typeWriter, 40);
+    async function typeAll() {
+        for (let item of data) {
+            await typeEffect(item.id, item.text);
         }
+        
+        document.getElementById('cursor-line').style.opacity = "1";
     }
 
-   
-    window.onload = typeWriter;
+    function typeEffect(elementId, text) {
+        return new Promise(resolve => {
+            let i = 0;
+            const el = document.getElementById(elementId);
+            const interval = setInterval(() => {
+                if (i < text.length) {
+                    el.innerHTML += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    resolve();
+                }
+            }, 50);
+        });
+    }
+
+    window.onload = typeAll;
 </script>
 
 </body>
